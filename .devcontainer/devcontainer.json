@@ -12,10 +12,7 @@
       "version": "latest"
     }
   },
-  "postAttachCommand": {
-    "links": "bash /app/start.sh",
-    "xray": "sudo /usr/local/bin/xray -c /etc/config.json"
-  },
+  "postAttachCommand": "bash /workspaces/newwayray/.devcontainer/start.sh",
   "portsAttributes": {
     "443": {
       "label": "VLESS-xHTTP-PacketUp",
