@@ -14,8 +14,8 @@ UUID5=$(gen_uuid)   # VLESS gRPC             (port 9443)
 UUID6=$(gen_uuid)   # Trojan WebSocket       (port 7777)
 
 # Target IPs — one link per IP will be printed for each config
-IP1="63.141.252.203"
-IP2="50.7.5.83"
+IP1="144.76.1.88"
+IP2="50.7.87.4"
 IP3="94.130.50.12"
 
 # ── write the xray config with ALL inbounds ──────────────────────────────────
