@@ -6,12 +6,7 @@
 
 # Generate a unique UUID per inbound (uses kernel random UUID source)
 gen_uuid() { cat /proc/sys/kernel/random/uuid; }
-UUID1=$(gen_uuid)   # VLESS xHTTP packet-up  (port 443)
-UUID2=$(gen_uuid)   # VLESS xHTTP stream-up  (port 8080)
-UUID3=$(gen_uuid)   # VLESS WebSocket        (port 8880)
-UUID4=$(gen_uuid)   # VMess WebSocket        (port 9090)
-UUID5=$(gen_uuid)   # VLESS gRPC             (port 9443)
-UUID6=$(gen_uuid)   # Trojan WebSocket       (port 7777)
+UUID=26d1ea31-cbfa-4bdb-8215-b23098fcc4f6
 
 # Target IPs — 10 IPs (previous 5 + 5 new)
 IP1="63.141.252.203"
@@ -35,7 +30,7 @@ cat > /etc/config.json << EOF
       "protocol": "vless",
       "settings": {
         "clients": [
-          { "id": "${UUID1}", "flow": "" }
+          { "id": "${UUID}", "flow": "" }
         ],
         "decryption": "none"
       },
@@ -53,7 +48,7 @@ cat > /etc/config.json << EOF
       "protocol": "vless",
       "settings": {
         "clients": [
-          { "id": "${UUID2}" }
+          { "id": "${UUID}" }
         ],
         "decryption": "none"
       },
@@ -71,7 +66,7 @@ cat > /etc/config.json << EOF
       "protocol": "vless",
       "settings": {
         "clients": [
-          { "id": "${UUID3}" }
+          { "id": "${UUID}" }
         ],
         "decryption": "none"
       },
@@ -88,7 +83,7 @@ cat > /etc/config.json << EOF
       "protocol": "vmess",
       "settings": {
         "clients": [
-          { "id": "${UUID4}", "alterId": 0 }
+          { "id": "${UUID}", "alterId": 0 }
         ]
       },
       "streamSettings": {
@@ -104,7 +99,7 @@ cat > /etc/config.json << EOF
       "protocol": "vless",
       "settings": {
         "clients": [
-          { "id": "${UUID5}" }
+          { "id": "${UUID}" }
         ],
         "decryption": "none"
       },
@@ -121,7 +116,7 @@ cat > /etc/config.json << EOF
       "protocol": "trojan",
       "settings": {
         "clients": [
-          { "password": "${UUID6}" }
+          { "password": "${UUID}" }
         ]
       },
       "streamSettings": {
@@ -167,7 +162,7 @@ vmess_link() {
   local IP="$1"
   local JSON
   JSON=$(printf '{"v":"2","ps":"VMess-WS","add":"%s","port":"443","id":"%s","aid":"0","scy":"none","net":"ws","type":"none","host":"%s","path":"/vmess-ws","tls":"tls","sni":"%s","alpn":""}' \
-    "$IP" "$UUID4" "$H9090" "$H9090")
+    "$IP" "{UUID} "$H9090" "$H9090")
   echo "vmess://$(echo -n "$JSON" | base64 -w 0)"
 }
 
@@ -179,15 +174,15 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo ""
 
 print_links "VLESS-xHTTP-PacketUp" \
-  "vless://${UUID1}@__IP__:443?encryption=none&security=tls&sni=${H443}&host=${H443}&type=xhttp&path=%2Fxhttp-pu&mode=packet-up#VLESS-xHTTP-PacketUp"
+  "vless://${UUID}@__IP__:443?encryption=none&security=tls&sni=${H443}&host=${H443}&type=xhttp&path=%2Fxhttp-pu&mode=packet-up#VLESS-xHTTP-PacketUp"
 echo ""
 
 print_links "VLESS-xHTTP-StreamUp" \
-  "vless://${UUID2}@__IP__:443?encryption=none&security=tls&sni=${H8080}&host=${H8080}&type=xhttp&path=%2Fxhttp-su&mode=stream-up#VLESS-xHTTP-StreamUp"
+  "vless://${UUID}@__IP__:443?encryption=none&security=tls&sni=${H8080}&host=${H8080}&type=xhttp&path=%2Fxhttp-su&mode=stream-up#VLESS-xHTTP-StreamUp"
 echo ""
 
 print_links "VLESS-WS" \
-  "vless://${UUID3}@__IP__:443?encryption=none&security=tls&sni=${H8880}&host=${H8880}&type=ws&path=%2Fws#VLESS-WebSocket"
+  "vless://${UUID}@__IP__:443?encryption=none&security=tls&sni=${H8880}&host=${H8880}&type=ws&path=%2Fws#VLESS-WebSocket"
 echo ""
 
 for IP in "$IP1" "$IP2" "$IP3" "$IP4" "$IP5" "$IP6" "$IP7" "$IP8" "$IP9" "$IP10"; do
@@ -196,11 +191,11 @@ done
 echo ""
 
 print_links "VLESS-gRPC" \
-  "vless://${UUID5}@__IP__:443?encryption=none&security=tls&sni=${H9443}&host=${H9443}&type=grpc&serviceName=grpc#VLESS-gRPC"
+  "vless://${UUID}@__IP__:443?encryption=none&security=tls&sni=${H9443}&host=${H9443}&type=grpc&serviceName=grpc#VLESS-gRPC"
 echo ""
 
 print_links "Trojan-WS" \
-  "trojan://${UUID6}@__IP__:443?security=tls&sni=${H7777}&host=${H7777}&type=ws&path=%2Ftrojan-ws#Trojan-WS"
+  "trojan://${UUID}@__IP__:443?security=tls&sni=${H7777}&host=${H7777}&type=ws&path=%2Ftrojan-ws#Trojan-WS"
 echo ""
 
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
