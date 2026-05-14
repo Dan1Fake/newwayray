@@ -4,8 +4,6 @@
 #  newwayray  –  dynamic multi-config starter
 # ─────────────────────────────────────────────
 
-# Generate a unique UUID per inbound (uses kernel random UUID source)
-gen_uuid() { cat /proc/sys/kernel/random/uuid; }
 UUID=26d1ea31-cbfa-4bdb-8215-b23098fcc4f6
 
 # Target IPs — 10 IPs (previous 5 + 5 new)
