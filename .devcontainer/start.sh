@@ -160,7 +160,7 @@ vmess_link() {
   local IP="$1"
   local JSON
   JSON=$(printf '{"v":"2","ps":"VMess-WS","add":"%s","port":"443","id":"%s","aid":"0","scy":"none","net":"ws","type":"none","host":"%s","path":"/vmess-ws","tls":"tls","sni":"%s","alpn":""}' \
-    "$IP" "{UUID} "$H9090" "$H9090")
+    "$IP" "${UUID}" "$H9090" "$H9090")
   echo "vmess://$(echo -n "$JSON" | base64 -w 0)"
 }
 
@@ -194,13 +194,6 @@ echo ""
 
 print_links "Trojan-WS" \
   "trojan://${UUID}@__IP__:443?security=tls&sni=${H7777}&host=${H7777}&type=ws&path=%2Ftrojan-ws#Trojan-WS"
-echo ""
-
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "  Each config has its own unique UUID (randomized at startup)"
-echo "  TLS SNI/host : provided by GitHub (*.app.github.dev)"
-echo "  Tip: if one IP is blocked by your ISP, try another"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 
 # ── hand off to xray (keeps the container alive) ─────────────────────────────
